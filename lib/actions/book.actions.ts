@@ -1,7 +1,7 @@
 'use server';
 import { connectToDatabase } from "@/database/mongoose";
 import { CreateBook, TextSegment } from "@/types";
-import { escapeRegex, generateSlug, serializeData } from "../utils";
+import { escapeRegex, generateSlug, serializeData } from "@/lib/utils";
 import Book from "@/database/models/book.model";
 import BookSegment from "@/database/models/book-segment.model";
 
@@ -106,6 +106,28 @@ export const getAllBooks = async (search?: string) => {
         }
     } catch (e) {
         console.error('Error connecting to database', e);
+        return {
+            success: false, error: e
+        }
+    }
+}
+
+export const getBookBySlug = async (slug: string) => {
+    try {
+        await connectToDatabase();
+
+        const book = await Book.findOne({ slug }).lean();
+
+        if (!book) {
+            return { success: false, error: 'Book not found' };
+        }
+
+        return {
+            success: true,
+            data: serializeData(book)
+        }
+    } catch (e) {
+        console.error('Error fetching book by slug', e);
         return {
             success: false, error: e
         }

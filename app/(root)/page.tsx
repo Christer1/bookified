@@ -2,13 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import HeroSection from "../components/HeroSection";
 import BookCard from "@/app/components/BookCard";
-import { getAllBooks } from "../lib/actions/book.action";
+import { getAllBooks } from "../../lib/actions/book.actions";
 
 export default async function Home() {
-
   const bookResult = await getAllBooks();
 
-  const books = bookResult.success ? bookResult.data ?? [] : [];
+  const books = bookResult.success ? (bookResult.data ?? []) : [];
 
   return (
     <main className="wrapper container">
