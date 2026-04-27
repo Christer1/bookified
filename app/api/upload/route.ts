@@ -1,12 +1,12 @@
-import { MAX_FILE_SIZE } from '@/app/lib/constant';
+import { MAX_FILE_SIZE } from '@/lib/constant';
 import { auth } from '@clerk/nextjs/server';
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request): Promise<NextResponse> {
-  const body = (await request.json()) as HandleUploadBody;
 
   try {
+    const body = (await request.json()) as HandleUploadBody;
     const jsonResponse = await handleUpload({
       token: process.env.BLOB_READ_WRITE_TOKEN,
       body,
